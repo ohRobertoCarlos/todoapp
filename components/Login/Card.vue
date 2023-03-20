@@ -1,22 +1,19 @@
 <template>
   <div class="card-login">
     <div class="card-login-header">
-      <span class="title-card-register">ToDo App | Register</span>
+      <span class="title-card-login">ToDo App | Login</span>
     </div>
 
-    <div class="form-group-card-register">
-      <label class="label-card-register">Name:</label>
-      <input type="text" class="input-card-register" />
+    <div class="form-group-card-login">
+      <label class="label-card-login">E-mail</label>
+      <input type="text" class="input-card-login" />
 
-      <label class="label-card-register">E-mail</label>
-      <input type="text" class="input-card-register" />
+      <label class="label-card-login">Password</label>
+      <input type="text" class="input-card-login" />
 
-      <label class="label-card-register">Password</label>
-      <input type="text" class="input-card-register" />
-
-      <button type="button" class="button-register">Register</button>
-      <NuxtLink class="button-voltar" to="/login">
-          Voltar
+      <button type="button" class="button-login">Login</button>
+      <NuxtLink class="button-voltar" to="/register">
+          Register
     </NuxtLink>
     </div>
   </div>
@@ -29,6 +26,20 @@ export default {
     return {
 
     }
+  },
+  methods : {
+    getCsrfToken(){
+      return this.$axios.get('/sanctum/csrf-token')
+      .then(response => {
+
+      })
+      .catch(err => {
+
+      });
+    }
+  },
+  mounted() {
+    this.getCsrfToken();
   }
 }
 </script>
@@ -47,32 +58,32 @@ export default {
     margin-top: 20px;
   }
 
-  .input-card-register {
+  .input-card-login {
     width: 90%;
     margin-left: 5%;
     padding: 6px;
     margin-bottom: 15px;
   }
 
-  .input-card-register:focus-within {
+  .input-card-login:focus-within {
     border: 2px solid #8E4BE6;
     box-shadow: 0 0 0 0;
     outline: 0;
   }
 
-  .label-card-register {
+  .label-card-login {
     margin-left: 5%;
     font-weight: bold;
   }
 
-  .form-group-card-register {
+  .form-group-card-login {
     display: grid;
     gap : 4;
     flex-wrap: wrap;
     align-self: flex-end;
   }
 
-  .button-register {
+  .button-login {
     margin: 0 auto;
     padding: 6px;
     width: 50%;
@@ -84,7 +95,7 @@ export default {
     background-color: #8E4BE6;
   }
 
-  .button-register:hover {
+  .button-login:hover {
     filter: brightness(0.9);
   }
 
@@ -106,7 +117,7 @@ export default {
     filter: brightness(0.9);
   }
 
-  .title-card-register {
+  .title-card-login {
     font-size: 18px;
     margin: 10px auto;
     font-weight: bold;
