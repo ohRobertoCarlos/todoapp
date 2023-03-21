@@ -56,11 +56,8 @@ export default {
     }
   },
   beforeCreate() {
-    if (getAccessToken() == false) {
-        this.$router.push({name:'login'});
-    }
-    else {
-        this.$router.push({name:'index'});
+    if (getAccessToken()) {
+      this.$router.push({name:'index'});
     }
   }
 }

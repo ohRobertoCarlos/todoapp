@@ -39,20 +39,28 @@ export const logoutAll = (access_token) => {
 }
 
 export const getAccessToken = () => {
-  if (localStorage.getItem('access_token') != null) {
+  if (process.client && localStorage.getItem('access_token') != null) {
     return localStorage.getItem('access_token');
   }
   return false;
 }
 
 export const setAccessToken = (token) => {
+  if (process.client) {
     localStorage.setItem('access_token', token);
 
     return true;
+  }
+
+  return false;
 }
 
 export const removeAccessToken = () => {
-  localStorage.removeItem('access_token');
+  if (process.client) {
+    localStorage.removeItem('access_token');
 
-  return true;
+    return true;
+  }
+
+  return false;
 }

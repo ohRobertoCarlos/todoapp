@@ -7,7 +7,13 @@
 </template>
 
 <script>
+import { getAccessToken } from '~/Utils/authentication';
 export default {
-  name: 'IndexPage'
+  name: 'IndexPage',
+  beforeCreate() {
+    if (!getAccessToken()) {
+      this.$router.push({name:'Login'});
+    }
+  }
 }
 </script>
