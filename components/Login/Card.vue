@@ -6,12 +6,12 @@
 
     <div class="form-group-card-login">
       <label class="label-card-login">E-mail</label>
-      <input type="text" class="input-card-login" />
+      <input v-model="credentials.email" type="text" class="input-card-login" />
 
       <label class="label-card-login">Password</label>
-      <input type="text" class="input-card-login" />
+      <input v-model="credentials.password" type="text" class="input-card-login" />
 
-      <button type="button" class="button-login">Login</button>
+      <button type="button" class="button-login" @click="login()">Login</button>
       <NuxtLink class="button-voltar" to="/register">
           Register
     </NuxtLink>
@@ -24,18 +24,28 @@ export default {
   name : 'Card',
   data() {
     return {
-
+        credentials : {
+          email : null,
+          password : null,
+        }
     }
   },
   methods : {
     getCsrfToken(){
-      return this.$axios.get('/sanctum/csrf-token')
+      return this.$axios.get('/sanctum/csrf-cookie')
       .then(response => {
 
       })
       .catch(err => {
 
       });
+    },
+    login(){
+      if (!this.credentials.email || !this.credentials.password) {
+        return;
+      }
+
+      this.$axios.post('/api/v1/auth/login', this.credentials);
     }
   },
   mounted() {
