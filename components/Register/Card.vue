@@ -6,15 +6,15 @@
 
     <div class="form-group-card-register">
       <label class="label-card-register">Name:</label>
-      <input type="text" class="input-card-register" />
+      <input v-model="userData.name" type="text" class="input-card-register" />
 
       <label class="label-card-register">E-mail</label>
-      <input type="text" class="input-card-register" />
+      <input v-model="userData.email" type="text" class="input-card-register" />
 
       <label class="label-card-register">Password</label>
-      <input type="text" class="input-card-register" />
+      <input v-model="userData.password" type="password" class="input-card-register" />
 
-      <button type="button" class="button-register">Register</button>
+      <button type="button" @click="register()" class="button-register">Register</button>
       <NuxtLink class="button-voltar" to="/login">
           Voltar
     </NuxtLink>
@@ -23,11 +23,44 @@
 </template>
 
 <script>
+import { getAccessToken } from '~/Utils/authentication';
+
 export default {
   name : 'Card',
   data() {
     return {
+      userData : {
+        name : null,
+        email : null,
+        password : null
+      }
+    }
+  },
+  methods : {
+    register() {
+      if (
+        !this.userData.name ||
+        !this.userData.email ||
+        !this.userData.password
+      ) {
+        return;
+      }
 
+      this.$axios.post('/api/v1/auth/register', this.userData)
+      .then(response => {
+
+      })
+      .catch(err => {
+
+      });
+    }
+  },
+  beforeCreate() {
+    if (getAccessToken() == false) {
+        this.$router.push({name:'login'});
+    }
+    else {
+        this.$router.push({name:'index'});
     }
   }
 }

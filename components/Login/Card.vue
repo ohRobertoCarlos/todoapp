@@ -9,7 +9,7 @@
       <input v-model="credentials.email" type="text" class="input-card-login" />
 
       <label class="label-card-login">Password</label>
-      <input v-model="credentials.password" type="text" class="input-card-login" />
+      <input v-model="credentials.password" type="password" class="input-card-login" />
 
       <button type="button" class="button-login" @click="login()">Login</button>
       <NuxtLink class="button-voltar" to="/register">
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { setAccessToken, getAccessToken } from '~/Utils/authentication';
+
 export default {
   name : 'Card',
   data() {
@@ -45,11 +47,23 @@ export default {
         return;
       }
 
-      this.$axios.post('/api/v1/auth/login', this.credentials);
+      this.$axios.post('/api/v1/auth/login', this.credentials)
+      .then(response => {
+        console.log(response.data.data.token);
+        setAccessToken(response.data.data.token);
+      })
+      .catch(err => {
+
+      });
     }
   },
   mounted() {
     this.getCsrfToken();
+  },
+  beforeCreate() {
+    if (!getAccessToken() == false) {
+      this.$router.push({name:'index'});
+    }
   }
 }
 </script>
