@@ -9,11 +9,11 @@
 
     <div class="add-todo-section">
       <div class="input-add-todo-section">
-          <input class="input-add-todo" type="text" placeholder="Adicione um To-Do..." name="todo">
+          <input v-model="todo.content" class="input-add-todo" type="text" placeholder="Adicione um To-Do..." name="todo">
       </div>
 
       <div class="button-add-todo-section">
-        <button class="button-add-todo">
+        <button @click="createTodo()" class="button-add-todo">
           <font-awesome-icon icon="fa-solid fa-plus" />
         </button>
       </div>
@@ -75,10 +75,68 @@
 import { getAccessToken } from '~/Utils/authentication';
 export default {
   name: 'IndexPage',
+  data() {
+    return {
+      loading : true,
+      todo : {
+        content : null
+      },
+      todos : [],
+    }
+  },
   beforeCreate() {
     if (!getAccessToken()) {
       this.$router.push({name:'Login'});
     }
+  },
+  mounted() {
+    this.getCsrfToken();
+    this.getTodos();
+  },
+  methods: {
+    getTodos() {
+      this.$axios.get('/api/v1/todos', {
+        headers : {
+          Authorization: 'Bearer ' + getAccessToken(),
+          Accept : 'application/json'
+        }
+      })
+      .then(response => {
+        this.todos = response.data;
+      })
+      .catch(err => {
+        //
+      });
+    },
+    createTodo(){
+        this.$axios.post('/api/v1/todos',this.todo, {
+          headers : {
+            Authorization: 'Bearer ' + getAccessToken(),
+            Accept : 'application/json'
+          }
+        })
+        .then(response => {
+          this.getTodos();
+          this.resetTodoInput();
+        })
+        .catch(err => {
+          //
+        });
+    },
+    resetTodoInput(){
+      this.todo = {
+        content : null,
+      };
+    },
+    getCsrfToken(){
+      return this.$axios.get('/sanctum/csrf-cookie')
+      .then(response => {
+
+      })
+      .catch(err => {
+
+      });
+    },
   }
 }
 </script>
