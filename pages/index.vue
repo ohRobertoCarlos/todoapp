@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div class="todos-section">
+    <div ref="todosSection" class="todos-section">
       <div v-for="todo in todos" class="todo-item" :key="todo.id">
         <div class="todo-content-section">
           <p>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="todo-button-delete-section">
-          <button class="button-delete-todo">
+          <button @click="deleteTodo(todo.id)" class="button-delete-todo">
             <font-awesome-icon icon="fa-solid fa-trash" />
           </button>
         </div>
@@ -89,6 +89,7 @@ export default {
       .then(response => {
         this.getTodos();
         this.resetTodoInput();
+        setTimeout(() => this.scrollBottomTodoSection(), 400);
       })
       .catch(err => {
         //
@@ -111,6 +112,27 @@ export default {
     logout(){
       removeAccessToken();
       this.$router.push({name:'Login'});
+    },
+    scrollBottomTodoSection() {
+      this.$refs.todosSection.scrollTop = this.$refs.todosSection.scrollHeight;
+    },
+    deleteTodo(todoId){
+      if (!confirm('Tem certeza?')) {
+        return;
+      }
+
+      this.$axios.delete('/api/v1/todos/' + todoId, {
+        headers : {
+          Authorization : 'Bearer ' + getAccessToken(),
+          Accept : 'application/json',
+        }
+      })
+      .then(response => {
+        this.getTodos();
+      })
+      .catch(err => {
+
+      });
     }
   }
 }
@@ -120,7 +142,25 @@ export default {
 
   .todos-section {
     margin-top: 20px;
+    overflow: scroll;
+    max-height: 500px;
+    padding: 5px;
   }
+
+  .todos-section::-webkit-scrollbar {
+  width: 3px;
+  height: 3px; /* A altura só é vista quando a rolagem é horizontal */
+}
+
+.todos-section::-webkit-scrollbar-track {
+  background: transparent;
+  padding: 2px;
+}
+
+.todos-section::-webkit-scrollbar-thumb {
+  background-color: #8E4BE6;
+}
+
   .button-add-todo button.button-delete-todo .button-logout {
       height: 47px !important;
       width: 100%;
