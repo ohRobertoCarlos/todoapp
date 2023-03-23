@@ -49,8 +49,8 @@ export default {
 
       this.$axios.post('/api/v1/auth/login', this.credentials)
       .then(response => {
-        console.log(response.data.data.token);
         setAccessToken(response.data.data.token);
+        this.$router.push({name:'index'});
       })
       .catch(err => {
 

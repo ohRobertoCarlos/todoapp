@@ -36,10 +36,12 @@ export default {
     axios: {
       baseURL: process.env.BASE_URL_API,
       withCredentials : true,
+      creadentials : true,
     }
   },
   axios: {
     withCredentials : true,
+    creadentials : true,
   },
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [

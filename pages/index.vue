@@ -2,7 +2,7 @@
   <b-container fluid="sm">
     <div class="header-page-index">
       <span class="app-title">ToDo App</span>
-      <button class="button-logout">
+      <button @click="logout()" class="button-logout">
         <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
       </button>
     </div>
@@ -20,9 +20,11 @@
     </div>
 
     <div class="todos-section">
-      <div class="todo-item">
+      <div v-for="todo in todos" class="todo-item" :key="todo.id">
         <div class="todo-content-section">
-          <p>Comprar Açúcar</p>
+          <p>
+              {{ todo.content }}
+          </p>
         </div>
 
         <div class="todo-button-delete-section">
@@ -32,47 +34,12 @@
         </div>
       </div>
 
-      <div class="todo-item">
-        <div class="todo-content-section">
-          <p>Comprar Açúcar</p>
-        </div>
-
-        <div class="todo-button-delete-section">
-          <button class="button-delete-todo">
-            <font-awesome-icon icon="fa-solid fa-trash" />
-          </button>
-        </div>
-      </div>
-
-      <div class="todo-item">
-        <div class="todo-content-section">
-          <p>Comprar Açúcar</p>
-        </div>
-
-        <div class="todo-button-delete-section">
-          <button class="button-delete-todo">
-            <font-awesome-icon icon="fa-solid fa-trash" />
-          </button>
-        </div>
-      </div>
-
-      <div class="todo-item">
-        <div class="todo-content-section">
-          <p>Comprar Açúcar</p>
-        </div>
-
-        <div class="todo-button-delete-section">
-          <button class="button-delete-todo">
-            <font-awesome-icon icon="fa-solid fa-trash" />
-          </button>
-        </div>
-      </div>
     </div>
   </b-container>
 </template>
 
 <script>
-import { getAccessToken } from '~/Utils/authentication';
+import { getAccessToken, removeAccessToken } from '~/Utils/authentication';
 export default {
   name: 'IndexPage',
   data() {
@@ -109,19 +76,23 @@ export default {
       });
     },
     createTodo(){
-        this.$axios.post('/api/v1/todos',this.todo, {
-          headers : {
-            Authorization: 'Bearer ' + getAccessToken(),
-            Accept : 'application/json'
-          }
-        })
-        .then(response => {
-          this.getTodos();
-          this.resetTodoInput();
-        })
-        .catch(err => {
-          //
-        });
+      if (!this.todo.content) {
+        return;
+      }
+
+      this.$axios.post('/api/v1/todos',this.todo, {
+        headers : {
+          Authorization: 'Bearer ' + getAccessToken(),
+          Accept : 'application/json'
+        }
+      })
+      .then(response => {
+        this.getTodos();
+        this.resetTodoInput();
+      })
+      .catch(err => {
+        //
+      });
     },
     resetTodoInput(){
       this.todo = {
@@ -137,6 +108,10 @@ export default {
 
       });
     },
+    logout(){
+      removeAccessToken();
+      this.$router.push({name:'Login'});
+    }
   }
 }
 </script>
