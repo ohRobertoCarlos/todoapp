@@ -5,11 +5,11 @@
     </div>
 
     <div class="form-group-card-register">
-      <label class="label-card-register">Name</label>
+      <label class="label-card-register">Nome</label>
       <input v-model="userData.name" type="text" class="input-card-register" />
 
       <label class="label-card-register">E-mail</label>
-      <input v-model="userData.email" type="text" class="input-card-register" />
+      <input v-model="userData.email" type="email" class="input-card-register" />
 
       <div v-show="userData.password && userData.password.length > 0 && showMessageRulesPassword">
         <p class="message-rule-password">
@@ -29,13 +29,13 @@
           As senhas não coincedem.
       </p>
 
-      <label class="label-card-register">Password</label>
+      <label class="label-card-register">Senha</label>
       <input v-model="userData.password" type="password" class="input-card-register" />
 
-      <label class="label-card-register">Confirm password</label>
-      <input v-model="userData.password_confirm" type="password" class="input-card-register" />
+      <label class="label-card-register">Confirmar Senha</label>
+      <input v-model="userData.password_confirmation" type="password" class="input-card-register" />
 
-      <button type="button" @click="register()" class="button-register">Register</button>
+      <button type="button" @click="register()" class="button-register">Registrar</button>
       <NuxtLink class="button-voltar" to="/login">
           Voltar
     </NuxtLink>
@@ -54,7 +54,7 @@ export default {
         name : null,
         email : null,
         password : null,
-        password_confirm : null
+        password_confirmation : null
       },
       showMessageRulesPassword : false,
       showMessagePasswordNotEquals : false,
@@ -77,7 +77,7 @@ export default {
       }
       this.showMessageRulesPassword = false;
 
-      if (this.userData.password !== this.userData.password_confirm) {
+      if (this.userData.password !== this.userData.password_confirmation) {
         this.showMessagePasswordNotEquals = true;
         this.showMessageRulesPassword = false;
         return;
@@ -108,6 +108,7 @@ export default {
     margin: 0 auto;
     margin-top: 80px;
     border-radius: 3px;
+    box-shadow: 2px 2px 8px #d3d2d2;
   }
 
   .card-login-header{

@@ -8,12 +8,12 @@
       <label class="label-card-login">E-mail</label>
       <input v-model="credentials.email" type="text" class="input-card-login" />
 
-      <label class="label-card-login">Password</label>
+      <label class="label-card-login">Senha</label>
       <input v-model="credentials.password" type="password" class="input-card-login" />
 
-      <button type="button" class="button-login" @click="login()">Login</button>
+      <button type="button" class="button-login" @click="login()">Entrar</button>
       <NuxtLink class="button-voltar" to="/register">
-          Register
+          Registrar
     </NuxtLink>
     </div>
   </div>
@@ -75,6 +75,7 @@ export default {
     margin: 0 auto;
     margin-top: 80px;
     border-radius: 3px;
+    box-shadow: 2px 2px 8px #d3d2d2;
   }
 
   .card-login-header{
