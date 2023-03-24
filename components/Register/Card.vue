@@ -5,14 +5,35 @@
     </div>
 
     <div class="form-group-card-register">
-      <label class="label-card-register">Name:</label>
+      <label class="label-card-register">Name</label>
       <input v-model="userData.name" type="text" class="input-card-register" />
 
       <label class="label-card-register">E-mail</label>
       <input v-model="userData.email" type="text" class="input-card-register" />
 
+      <div v-show="userData.password && userData.password.length > 0 && showMessageRulesPassword">
+        <p class="message-rule-password">
+          A senha deve ter pelo menos 6 dígitos.
+        </p>
+
+        <p class="message-rule-password">
+          A senha deve ter pelo menos 1 número.
+        </p>
+
+        <p class="message-rule-password">
+          A senha deve ter pelo menos 1 símbolo.
+        </p>
+      </div>
+
+      <p v-show="userData.password && userData.password.length > 0 && showMessagePasswordNotEquals" class="message-rule-password">
+          As senhas não coincedem.
+      </p>
+
       <label class="label-card-register">Password</label>
       <input v-model="userData.password" type="password" class="input-card-register" />
+
+      <label class="label-card-register">Confirm password</label>
+      <input v-model="userData.password_confirm" type="password" class="input-card-register" />
 
       <button type="button" @click="register()" class="button-register">Register</button>
       <NuxtLink class="button-voltar" to="/login">
@@ -32,8 +53,11 @@ export default {
       userData : {
         name : null,
         email : null,
-        password : null
-      }
+        password : null,
+        password_confirm : null
+      },
+      showMessageRulesPassword : false,
+      showMessagePasswordNotEquals : false,
     }
   },
   methods : {
@@ -46,6 +70,20 @@ export default {
         return;
       }
 
+      if (!(/^(?=.*\d)(?=.*\W)[\da-zA-Z\W]{6,}$/.test(this.userData.password))) {
+        this.showMessageRulesPassword = true;
+        this.showMessagePasswordNotEquals = false;
+        return;
+      }
+      this.showMessageRulesPassword = false;
+
+      if (this.userData.password !== this.userData.password_confirm) {
+        this.showMessagePasswordNotEquals = true;
+        this.showMessageRulesPassword = false;
+        return;
+      }
+      this.showMessagePasswordNotEquals = false;
+
       this.$axios.post('/api/v1/auth/register', this.userData)
       .then(response => {
         this.$router.push({name:'Login'});
@@ -53,7 +91,7 @@ export default {
       .catch(err => {
 
       });
-    }
+    },
   },
   beforeCreate() {
     if (getAccessToken()) {
@@ -141,6 +179,14 @@ export default {
     margin: 10px auto;
     font-weight: bold;
     text-align: center;
+  }
+
+  .message-rule-password {
+    color : rgb(255, 74, 42);
+    font-size: 12px;
+    font-weight: 500;
+    margin: 5px;
+    margin-left: 25px;
   }
 
   @media screen and (min-width: 600px) {
