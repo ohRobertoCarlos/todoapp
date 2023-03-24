@@ -13,7 +13,7 @@
 
       <button type="button" class="button-login" @click="login()">Entrar</button>
       <NuxtLink class="button-voltar" to="/register">
-          Registrar
+          Registre-se
     </NuxtLink>
     </div>
   </div>
