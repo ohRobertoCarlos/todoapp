@@ -35,6 +35,16 @@
       </div>
 
     </div>
+
+    <div class="todos-page-footer">
+      <span>
+        Você ainda tem {{ todosCount }} tarefas.
+      </span>
+
+      <button @click="deleteAllTodos()">
+        Limpar todas
+      </button>
+    </div>
   </b-container>
 </template>
 
@@ -60,6 +70,11 @@ export default {
   },
   mounted() {
     this.getTodos();
+  },
+  computed: {
+    todosCount() {
+      return this.todos.length;
+    }
   },
   methods: {
     getTodos() {
@@ -132,6 +147,24 @@ export default {
       }
 
       this.$axios.delete('/api/v1/todos/' + todoId, {
+        headers : {
+          Authorization : 'Bearer ' + getAccessToken(),
+          Accept : 'application/json',
+        }
+      })
+      .then(response => {
+        this.getTodos();
+      })
+      .catch(err => {
+
+      });
+    },
+    deleteAllTodos(){
+      if (!confirm('Tem certeza?')) {
+        return;
+      }
+
+      this.$axios.delete('/api/v1/todos/allTodos', {
         headers : {
           Authorization : 'Bearer ' + getAccessToken(),
           Accept : 'application/json',
@@ -265,4 +298,24 @@ export default {
     display: flex;
     align-content: stretch;
   }
+
+  .todos-page-footer {
+    display: flex;
+    position: sticky;
+    bottom: 0;
+    justify-content: space-between;
+    align-content: center;
+    margin-top: 10px;
+    padding: 3px;
+    background-color: white;
+  }
+
+  .todos-page-footer button {
+    padding: 3px;
+    background-color: #8E4BE6;
+    border: none;
+    border-radius: 3px;
+    color: white;
+  }
+
 </style>
