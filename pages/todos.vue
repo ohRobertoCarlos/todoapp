@@ -39,13 +39,17 @@
     </div>
 
     <div v-show="hasTodos" class="todos-page-footer">
-      <span>
-        Você ainda tem {{ todosCount }} tarefa(s).
-      </span>
+      <b-container fluid="sm">
+        <div class="todos-page-footer-content">
+          <span>
+            Você ainda tem {{ todosCount }} tarefa(s).
+          </span>
 
-      <button @click="deleteAllTodos()">
-        Limpar todas
-      </button>
+          <button @click="deleteAllTodos()">
+            Limpar todas
+          </button>
+        </div>
+    </b-container>
     </div>
   </b-container>
 </template>
@@ -320,8 +324,10 @@ export default {
 
   .todos-page-footer {
     display: flex;
-    position: sticky;
+    position: fixed;
     bottom: 0;
+    left: 0;
+    width: 100%;
     justify-content: space-between;
     align-content: center;
     margin-top: 10px;
@@ -339,6 +345,23 @@ export default {
 
   .text-no-todos {
     text-align: center;
+  }
+
+  .todos-page-footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    margin-top: 10px;
+    padding: 3px;
+    background-color: white;
+  }
+
+  .todos-page-footer-content button {
+    padding: 3px 5px;
+    background-color: #8E4BE6;
+    border: none;
+    border-radius: 3px;
+    color: white;
   }
 
 </style>
