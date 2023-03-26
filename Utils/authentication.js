@@ -1,3 +1,4 @@
+import axios from '@nuxtjs/axios'
 export const logout = (access_token) => {
   const tokenInvalidate = axiosInstance.post('api/v1/auth/logout',{},{
       headers: {
@@ -18,10 +19,10 @@ export const logout = (access_token) => {
   return tokenInvalidate;
 }
 
-export const logoutAll = (access_token) => {
-  const tokenInvalidate = axiosInstance.post('api/v1/auth/logout-all',{},{
+export const logoutAll = ($axios) => {
+  const tokenInvalidate = $axios.post('api/v1/auth/logout-all',{},{
       headers: {
-          Authorization : "Bearer "+access_token,
+          Authorization : "Bearer "+ getAccessToken(),
       }
   })
   .then(response => {

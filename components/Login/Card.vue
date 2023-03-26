@@ -6,7 +6,7 @@
 
     <div class="form-group-card-login">
       <label class="label-card-login">E-mail</label>
-      <input v-model="credentials.email" type="text" class="input-card-login" />
+      <input v-model="credentials.email" type="email" class="input-card-login" />
 
       <label class="label-card-login">Senha</label>
       <input v-model="credentials.password" type="password" class="input-card-login" />
@@ -21,6 +21,7 @@
 
 <script>
 import { setAccessToken, getAccessToken } from '~/Utils/authentication';
+import { Toast } from './../../Utils/Toast';
 
 export default {
   name : 'Card',
@@ -29,7 +30,7 @@ export default {
         credentials : {
           email : null,
           password : null,
-        }
+        },
     }
   },
   methods : {
@@ -49,6 +50,10 @@ export default {
 
       this.$axios.post('/api/v1/auth/login', this.credentials)
       .then(response => {
+        Toast.fire({
+          icon: 'success',
+          title: 'Login feito com sucesso!'
+        });
         setAccessToken(response.data.data.token);
         this.$router.push({name:'index'});
       })

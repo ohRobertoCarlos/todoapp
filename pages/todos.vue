@@ -39,7 +39,9 @@
 </template>
 
 <script>
-import { getAccessToken, removeAccessToken } from '~/Utils/authentication';
+import { getAccessToken, removeAccessToken, logoutAll } from '~/Utils/authentication';
+import { Toast } from './../Utils/Toast';
+
 export default {
   name: 'IndexPage',
   data() {
@@ -57,7 +59,6 @@ export default {
     }
   },
   mounted() {
-    this.getCsrfToken();
     this.getTodos();
   },
   methods: {
@@ -80,6 +81,13 @@ export default {
         return;
       }
 
+      Toast.fire({
+          icon: 'info',
+          title: 'Adicionando...'
+        }).then((toast) => {
+          toast.close();
+        });
+
       this.$axios.post('/api/v1/todos',this.todo, {
         headers : {
           Authorization: 'Bearer ' + getAccessToken(),
@@ -87,9 +95,14 @@ export default {
         }
       })
       .then(response => {
+        Toast.fire({
+          icon: 'success',
+          title: 'Tarefa adicionada com sucesso!'
+        });
+
         this.getTodos();
         this.resetTodoInput();
-        setTimeout(() => this.scrollBottomTodoSection(), 400);
+        setTimeout(() => this.scrollBottomTodoSection(), 500);
       })
       .catch(err => {
         //
@@ -100,17 +113,14 @@ export default {
         content : null,
       };
     },
-    getCsrfToken(){
-      return this.$axios.get('/sanctum/csrf-cookie')
-      .then(response => {
-
-      })
-      .catch(err => {
-
-      });
-    },
     logout(){
+      logoutAll(this.$axios);
       removeAccessToken();
+
+      Toast.fire({
+          icon: 'success',
+          title: 'Logout feito com sucesso!'
+        });
       this.$router.push({name:'Login'});
     },
     scrollBottomTodoSection() {

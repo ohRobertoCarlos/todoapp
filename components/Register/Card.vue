@@ -45,6 +45,7 @@
 
 <script>
 import { getAccessToken } from '~/Utils/authentication';
+import { Toast } from './../../Utils/Toast';
 
 export default {
   name : 'Card',
@@ -86,6 +87,10 @@ export default {
 
       this.$axios.post('/api/v1/auth/register', this.userData)
       .then(response => {
+        Toast.fire({
+          icon: 'success',
+          title: 'Usuário registrado com sucesso!'
+        });
         this.$router.push({name:'Login'});
       })
       .catch(err => {
