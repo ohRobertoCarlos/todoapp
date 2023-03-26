@@ -20,6 +20,8 @@
     </div>
 
     <div ref="todosSection" class="todos-section">
+      <p class="text-no-todos" v-show="!hasTodos && !loading">Você não tem tarefas disponíveis.</p>
+      <p class="text-no-todos" v-show="!hasTodos && loading">Carregando tarefas...</p>
       <div v-for="todo in todos" class="todo-item" :key="todo.id">
         <div class="todo-content-section">
           <p>
@@ -36,9 +38,9 @@
 
     </div>
 
-    <div class="todos-page-footer">
+    <div v-show="hasTodos" class="todos-page-footer">
       <span>
-        Você ainda tem {{ todosCount }} tarefas.
+        Você ainda tem {{ todosCount }} tarefa(s).
       </span>
 
       <button @click="deleteAllTodos()">
@@ -74,6 +76,9 @@ export default {
   computed: {
     todosCount() {
       return this.todos.length;
+    },
+    hasTodos() {
+      return this.todos.length > 0;
     }
   },
   methods: {
@@ -89,6 +94,9 @@ export default {
       })
       .catch(err => {
         //
+      })
+      .finally(() => {
+        this.loading = false;
       });
     },
     createTodo(){
@@ -164,6 +172,13 @@ export default {
         return;
       }
 
+      Toast.fire({
+          icon: 'info',
+          title: 'Limpando todas...'
+        }).then((toast) => {
+          toast.close();
+        });
+
       this.$axios.delete('/api/v1/todos/allTodos', {
         headers : {
           Authorization : 'Bearer ' + getAccessToken(),
@@ -171,6 +186,10 @@ export default {
         }
       })
       .then(response => {
+        Toast.fire({
+          icon: 'success',
+          title: 'Todas tarefas deletadas com sucesso!'
+        });
         this.getTodos();
       })
       .catch(err => {
@@ -311,11 +330,15 @@ export default {
   }
 
   .todos-page-footer button {
-    padding: 3px;
+    padding: 3px 5px;
     background-color: #8E4BE6;
     border: none;
     border-radius: 3px;
     color: white;
+  }
+
+  .text-no-todos {
+    text-align: center;
   }
 
 </style>
