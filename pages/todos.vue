@@ -20,7 +20,7 @@
     </div>
 
     <div ref="todosSection" class="todos-section">
-      <div v-for="todo in todos" class="todo-item" :key="todo.id">
+      <!-- <div v-for="todo in store.getTodos" class="todo-item" :key="todo.id">
         <div class="todo-content-section">
           <p>
               {{ todo.content }}
@@ -32,7 +32,7 @@
             <font-awesome-icon icon="fa-solid fa-trash" />
           </button>
         </div>
-      </div>
+      </div> -->
 
     </div>
   </b-container>
@@ -41,6 +41,8 @@
 <script>
 import { getAccessToken, removeAccessToken, logoutAll } from '~/Utils/authentication';
 import { Toast } from './../Utils/Toast';
+import { useTodoStore } from '~/store/useTodoStore';
+import { mapState, mapActions } from 'pinia';
 
 export default {
   name: 'IndexPage',
@@ -51,6 +53,7 @@ export default {
         content : null
       },
       todos : [],
+      store : null,
     }
   },
   beforeCreate() {
@@ -59,10 +62,15 @@ export default {
     }
   },
   mounted() {
+    this.store = useTodoStore();
     this.getTodos();
   },
+  computed: {
+    // ...mapState(useTodoStore, ['getTodosStore']),
+    // ...mapActions(useTodoStore, ['setTodos']),
+  },
   methods: {
-    getTodos() {
+    async getTodos() {
       this.$axios.get('/api/v1/todos', {
         headers : {
           Authorization: 'Bearer ' + getAccessToken(),
@@ -70,10 +78,12 @@ export default {
         }
       })
       .then(response => {
-        this.todos = response.data;
+        this.store.setTodos(response.data);
       })
       .catch(err => {
         //
+
+        return [];
       });
     },
     createTodo(){
