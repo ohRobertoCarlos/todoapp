@@ -16,7 +16,12 @@ git clone git@github.com:ohRobertoCarlos/todoapp.git
 cd todoapp
 ```
 
+### Criar arquivo de configurações.
 Copie o conteúdo do arquivo .env.example na raiz do projeto, em seguida, crie um arquivo .env na raiz do projeto e cole o conteúdo copiado.
+#### Se estiver no linux apenas rode o seguinte comando:
+```bash
+cp .env.example .env
+```
 
 ### Em seguida rode os seguintes comandos, então a aplicação está sendo servida em http://localhost:3000
 ```bash
