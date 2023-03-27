@@ -9,7 +9,7 @@
 
     <div class="add-todo-section">
       <div class="input-add-todo-section">
-          <input v-model="todo.content" class="input-add-todo" type="text" placeholder="Adicione um To-Do..." name="todo">
+          <input v-model="todo.content" class="input-add-todo" type="text" v-on:keyup.enter="createTodo()" placeholder="Adicione um To-Do..." name="todo">
       </div>
 
       <div class="button-add-todo-section">
@@ -126,9 +126,8 @@ export default {
           icon: 'success',
           title: 'Tarefa adicionada com sucesso!'
         });
-
-        this.getTodos();
         this.resetTodoInput();
+        this.todos.push(response.data);
         setTimeout(() => this.scrollBottomTodoSection(), 500);
       })
       .catch(err => {
@@ -165,7 +164,7 @@ export default {
         }
       })
       .then(response => {
-        this.getTodos();
+        this.todos = this.todos.filter(t => t.id !== todoId)
       })
       .catch(err => {
 
