@@ -3,14 +3,17 @@ Esta é uma aplicação cliente do seguinte projeto: [todoapp-api](https://githu
 
 ## Instruções para rodar o projeto
 
-## Clone o projeto
+### Denpendências para rodar projeto
+  * node
+  * git
+### Clone o projeto
 
-### Opção com SSH:
+#### Opção com SSH:
 ```bash
 git clone git@github.com:ohRobertoCarlos/todoapp.git
 ```
 
-## Entre no diretório do projeto
+### Entre no diretório do projeto
 
 ```bash
 cd todoapp
