@@ -21,7 +21,7 @@
         </p>
 
         <p class="message-rule-password">
-          A senha deve ter pelo menos 1 símbolo.
+          A senha deve ter pelo menos 1 símbolo
         </p>
       </div>
 
