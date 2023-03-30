@@ -6,10 +6,10 @@
 
     <div class="form-group-card-register">
       <label class="label-card-register">Nome</label>
-      <input v-model="userData.name" type="text" class="input-card-register" />
+      <input id="name" v-model="userData.name" type="text" class="input-card-register" />
 
       <label class="label-card-register">E-mail</label>
-      <input v-model="userData.email" type="email" class="input-card-register" />
+      <input id="email" v-model="userData.email" type="email" class="input-card-register" />
 
       <div v-show="userData.password && userData.password.length > 0 && showMessageRulesPassword">
         <p class="message-rule-password">
@@ -30,10 +30,10 @@
       </p>
 
       <label class="label-card-register">Senha</label>
-      <input v-model="userData.password" type="password" class="input-card-register" />
+      <input id="password" v-model="userData.password" type="password" class="input-card-register" />
 
       <label class="label-card-register">Confirmar Senha</label>
-      <input v-model="userData.password_confirmation" type="password" class="input-card-register" />
+      <input id="password_confirm" v-model="userData.password_confirmation" type="password" class="input-card-register" />
 
       <button type="button" @click="register()" class="button-register">Registrar</button>
       <NuxtLink class="button-voltar" to="/login">
