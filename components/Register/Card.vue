@@ -26,7 +26,7 @@
       </div>
 
       <p v-show="userData.password && userData.password.length > 0 && showMessagePasswordNotEquals" class="message-rule-password">
-          As senhas não coincedem.
+          As senhas não coincedem
       </p>
 
       <label class="label-card-register">Senha</label>
