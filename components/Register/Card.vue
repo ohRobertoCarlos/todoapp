@@ -85,6 +85,11 @@ export default {
       }
       this.showMessagePasswordNotEquals = false;
 
+      Toast.fire({
+          icon: 'info',
+          title: 'Registrando usuário...'
+        });
+
       this.$axios.post('/api/v1/auth/register', this.userData)
       .then(response => {
         Toast.fire({
@@ -94,7 +99,10 @@ export default {
         this.$router.push({name:'Login'});
       })
       .catch(err => {
-
+        Toast.fire({
+          icon: 'error',
+          title: 'Não foi possível registrar o usuário!'
+        });
       });
     },
   },

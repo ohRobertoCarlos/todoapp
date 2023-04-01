@@ -48,6 +48,11 @@ export default {
         return;
       }
 
+      Toast.fire({
+          icon: 'info',
+          title: 'Fazendo login...'
+        });
+
       this.$axios.post('/api/v1/auth/login', this.credentials)
       .then(response => {
         Toast.fire({
@@ -58,7 +63,10 @@ export default {
         this.$router.push({name:'index'});
       })
       .catch(err => {
-
+        Toast.fire({
+          icon: 'error',
+          title: 'Não foi possível fazer login!'
+        });
       });
     }
   },

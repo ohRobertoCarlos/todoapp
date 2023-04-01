@@ -110,9 +110,7 @@ export default {
 
       Toast.fire({
           icon: 'info',
-          title: 'Adicionando...'
-        }).then((toast) => {
-          toast.close();
+          title: 'Adicionando...',
         });
 
       this.$axios.post('/api/v1/todos',this.todo, {
@@ -124,7 +122,7 @@ export default {
       .then(response => {
         Toast.fire({
           icon: 'success',
-          title: 'Tarefa adicionada com sucesso!'
+          title: 'Tarefa adicionada com sucesso!',
         });
         this.resetTodoInput();
         this.todos.push(response.data);
