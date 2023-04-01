@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { getAccessToken, removeAccessToken, logoutAll } from '~/Utils/authentication';
+import { getAccessToken, removeAccessToken, logoutAll, acessTokenIsValid, userIsLogged } from '~/Utils/authentication';
 import { Toast } from './../Utils/Toast';
 
 export default {
@@ -70,9 +70,7 @@ export default {
     }
   },
   beforeCreate() {
-    if (!getAccessToken()) {
-      this.$router.push({name:'Login'});
-    }
+    userIsLogged(this.$router, this.$axios);
   },
   mounted() {
     this.getTodos();
@@ -97,7 +95,7 @@ export default {
         this.todos = response.data;
       })
       .catch(err => {
-        //
+        userIsLogged(this.$router, this.$axios);
       })
       .finally(() => {
         this.loading = false;
@@ -129,7 +127,7 @@ export default {
         setTimeout(() => this.scrollBottomTodoSection(), 500);
       })
       .catch(err => {
-        //
+        userIsLogged(this.$router, this.$axios);
       });
     },
     resetTodoInput(){
@@ -165,7 +163,7 @@ export default {
         this.todos = this.todos.filter(t => t.id !== todoId)
       })
       .catch(err => {
-
+        userIsLogged(this.$router, this.$axios);
       });
     },
     deleteAllTodos(){
@@ -194,7 +192,7 @@ export default {
         this.getTodos();
       })
       .catch(err => {
-
+        userIsLogged(this.$router, this.$axios);
       });
     }
   }

@@ -1,8 +1,8 @@
-import axios from '@nuxtjs/axios'
 export const logout = (access_token) => {
   const tokenInvalidate = axiosInstance.post('api/v1/auth/logout',{},{
       headers: {
           Authorization : "Bearer "+access_token,
+          Accept : 'application/json'
       }
   })
   .then(response => {
@@ -23,6 +23,7 @@ export const logoutAll = ($axios) => {
   const tokenInvalidate = $axios.post('api/v1/auth/logout-all',{},{
       headers: {
           Authorization : "Bearer "+ getAccessToken(),
+          Accept : 'application/json'
       }
   })
   .then(response => {
@@ -64,4 +65,21 @@ export const removeAccessToken = () => {
   }
 
   return false;
+}
+
+export const acessTokenIsValid = async ($axios) => {
+    const me = await $axios.get('/api/v1/auth/me', {
+        headers : {
+            Authorization : 'Bearer ' + getAccessToken(),
+            Accept : 'application/json'
+        }
+    });
+
+    return me != null;
+};
+
+export const userIsLogged = async ($router, $axios) => {
+    if (!acessTokenIsValid($axios)) {
+        $router.push({name:'Login'});
+      }
 }
