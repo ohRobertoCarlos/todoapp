@@ -6,15 +6,15 @@
 
     <div class="form-group-card-login">
       <label class="label-card-login">E-mail</label>
-      <input v-model="credentials.email" type="email" class="input-card-login" />
+      <input v-model="credentials.email" type="email" id="email" class="input-card-login" />
 
       <label class="label-card-login">Senha</label>
-      <input v-model="credentials.password" type="password" class="input-card-login" />
+      <input v-model="credentials.password" type="password" id="password" class="input-card-login" />
 
-      <button type="button" class="button-login" @click="login()">Entrar</button>
+      <button  type="button" class="button-login" @click="login()">Entrar</button>
       <NuxtLink class="button-voltar" to="/register">
           Registre-se
-    </NuxtLink>
+      </NuxtLink>
     </div>
   </div>
 </template>
