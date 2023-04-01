@@ -1,0 +1,21 @@
+.dark-mode {
+  --bg-color: #0E0912;
+  --border-color: #969090;
+  --todo-bg-color: #190C1C;
+  --text-color: #ffffff;
+  --icon-color: #969090;
+}
+
+
+.light-mode {
+  --bg-color: #ffffff;
+  --border-color: #F2F2F2;
+  --todo-bg-color: #F2F2F2;
+  --text-color: #000000;
+  --icon-color: #323232;
+}
+
+body {
+  background-color: var(--bg-color);
+}
+
