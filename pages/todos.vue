@@ -2,9 +2,12 @@
   <b-container fluid="sm">
     <div class="header-page-index">
       <span class="app-title">ToDo App</span>
-      <button @click="logout()" class="button-logout">
-        <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
-      </button>
+      <div class="header-section-buttons">
+        <SwitchColorMode />
+        <button @click="logout()" class="button-logout">
+          <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
+        </button>
+      </div>
     </div>
 
     <div class="add-todo-section">
@@ -22,6 +25,7 @@
     <div ref="todosSection" class="todos-section">
       <p class="text-no-todos" v-show="!hasTodos && !loading">Você não tem tarefas disponíveis.</p>
       <p class="text-no-todos" v-show="!hasTodos && loading">Carregando tarefas...</p>
+
       <div v-for="todo in todos" class="todo-item" :key="todo.id">
         <div class="todo-content-section">
           <p>
@@ -35,7 +39,6 @@
           </button>
         </div>
       </div>
-
     </div>
 
     <div v-show="hasTodos" class="todos-page-footer">
@@ -57,172 +60,170 @@
 <script>
 import { getAccessToken, removeAccessToken, logoutAll } from '~/Utils/authentication';
 import { Toast } from './../Utils/Toast';
+import SwitchColorMode from '~/components/Todos/SwitchColorMode.vue';
 
 export default {
-  name: 'IndexPage',
-  data() {
-    return {
-      loading : true,
-      todo : {
-        content : null
-      },
-      todos : [],
-    }
-  },
-  beforeCreate() {
-    if (!getAccessToken()) {
-      this.$router.push({name:'Login'});
-    }
-  },
-  mounted() {
-    this.getTodos();
-  },
-  computed: {
-    todosCount() {
-      return this.todos.length;
+    name: "IndexPage",
+    data() {
+        return {
+            loading: true,
+            todo: {
+                content: null
+            },
+            todos: [],
+        };
     },
-    hasTodos() {
-      return this.todos.length > 0;
-    }
-  },
-  methods: {
-    getTodos() {
-      this.$axios.get('/api/v1/todos', {
-        headers : {
-          Authorization: 'Bearer ' + getAccessToken(),
-          Accept : 'application/json'
+    components: { SwitchColorMode },
+    beforeCreate() {
+        if (!getAccessToken()) {
+            this.$router.push({ name: "Login" });
         }
-      })
-      .then(response => {
-        this.todos = response.data;
-      })
-      .catch(err => {
-        //
-      })
-      .finally(() => {
-        this.loading = false;
-      });
     },
-    createTodo(){
-      if (!this.todo.content) {
-        return;
-      }
-
-      Toast.fire({
-          icon: 'info',
-          title: 'Adicionando...',
-        });
-
-      this.$axios.post('/api/v1/todos',this.todo, {
-        headers : {
-          Authorization: 'Bearer ' + getAccessToken(),
-          Accept : 'application/json'
-        }
-      })
-      .then(response => {
-        Toast.fire({
-          icon: 'success',
-          title: 'Tarefa adicionada com sucesso!',
-        });
-        this.resetTodoInput();
-        this.todos.push(response.data);
-        setTimeout(() => this.scrollBottomTodoSection(), 500);
-      })
-      .catch(err => {
-        //
-      });
-    },
-    resetTodoInput(){
-      this.todo = {
-        content : null,
-      };
-    },
-    logout(){
-      logoutAll(this.$axios);
-      removeAccessToken();
-
-      Toast.fire({
-          icon: 'success',
-          title: 'Logout feito com sucesso!'
-        });
-      this.$router.push({name:'Login'});
-    },
-    scrollBottomTodoSection() {
-      this.$refs.todosSection.scrollTop = this.$refs.todosSection.scrollHeight;
-    },
-    deleteTodo(todoId){
-      if (!confirm('Tem certeza?')) {
-        return;
-      }
-
-      this.$axios.delete('/api/v1/todos/' + todoId, {
-        headers : {
-          Authorization : 'Bearer ' + getAccessToken(),
-          Accept : 'application/json',
-        }
-      })
-      .then(response => {
-        this.todos = this.todos.filter(t => t.id !== todoId)
-      })
-      .catch(err => {
-
-      });
-    },
-    deleteAllTodos(){
-      if (!confirm('Tem certeza?')) {
-        return;
-      }
-
-      Toast.fire({
-          icon: 'info',
-          title: 'Limpando todas...'
-        }).then((toast) => {
-          toast.close();
-        });
-
-      this.$axios.delete('/api/v1/todos/allTodos', {
-        headers : {
-          Authorization : 'Bearer ' + getAccessToken(),
-          Accept : 'application/json',
-        }
-      })
-      .then(response => {
-        Toast.fire({
-          icon: 'success',
-          title: 'Todas tarefas deletadas com sucesso!'
-        });
+    mounted() {
         this.getTodos();
-      })
-      .catch(err => {
-
-      });
-    }
-  }
+    },
+    computed: {
+        todosCount() {
+            return this.todos.length;
+        },
+        hasTodos() {
+            return this.todos.length > 0;
+        }
+    },
+    methods: {
+        getTodos() {
+            this.$axios.get("/api/v1/todos", {
+                headers: {
+                    Authorization: "Bearer " + getAccessToken(),
+                    Accept: "application/json"
+                }
+            })
+                .then(response => {
+                this.todos = response.data;
+            })
+                .catch(err => {
+                //
+            })
+                .finally(() => {
+                this.loading = false;
+            });
+        },
+        createTodo() {
+            if (!this.todo.content) {
+                return;
+            }
+            Toast.fire({
+                icon: "info",
+                title: "Adicionando...",
+            });
+            this.$axios.post("/api/v1/todos", this.todo, {
+                headers: {
+                    Authorization: "Bearer " + getAccessToken(),
+                    Accept: "application/json"
+                }
+            })
+                .then(response => {
+                Toast.fire({
+                    icon: "success",
+                    title: "Tarefa adicionada com sucesso!",
+                });
+                this.resetTodoInput();
+                this.todos.push(response.data);
+                setTimeout(() => this.scrollBottomTodoSection(), 500);
+            })
+                .catch(err => {
+                //
+            });
+        },
+        resetTodoInput() {
+            this.todo = {
+                content: null,
+            };
+        },
+        logout() {
+          this.setLightColorMode();
+            logoutAll(this.$axios);
+            removeAccessToken();
+            Toast.fire({
+                icon: "success",
+                title: "Logout feito com sucesso!"
+            });
+            this.$router.push({ name: "Login" });
+        },
+        scrollBottomTodoSection() {
+            this.$refs.todosSection.scrollTop = this.$refs.todosSection.scrollHeight;
+        },
+        deleteTodo(todoId) {
+            if (!confirm("Tem certeza?")) {
+                return;
+            }
+            this.$axios.delete("/api/v1/todos/" + todoId, {
+                headers: {
+                    Authorization: "Bearer " + getAccessToken(),
+                    Accept: "application/json",
+                }
+            })
+                .then(response => {
+                this.todos = this.todos.filter(t => t.id !== todoId);
+            })
+                .catch(err => {
+            });
+        },
+        deleteAllTodos() {
+            if (!confirm("Tem certeza?")) {
+                return;
+            }
+            Toast.fire({
+                icon: "info",
+                title: "Limpando todas..."
+            }).then((toast) => {
+                toast.close();
+            });
+            this.$axios.delete("/api/v1/todos/allTodos", {
+                headers: {
+                    Authorization: "Bearer " + getAccessToken(),
+                    Accept: "application/json",
+                }
+            })
+                .then(response => {
+                Toast.fire({
+                    icon: "success",
+                    title: "Todas tarefas deletadas com sucesso!",
+                });
+                this.getTodos();
+            })
+                .catch(err => {
+            });
+        },
+        setLightColorMode() {
+          if (process.client) {
+            document.body.className = 'light-mode';
+          }
+        }
+    },
 }
 </script>
 
 <style scoped>
-
   .todos-section {
     margin-top: 20px;
     overflow: scroll;
     max-height: 500px;
-    padding: 5px;
+    padding: 2px;
   }
 
   .todos-section::-webkit-scrollbar {
-  width: 3px;
-  height: 3px; /* A altura só é vista quando a rolagem é horizontal */
+  width: 6px;
+  height: 0px; /* A altura só é vista quando a rolagem é horizontal */
 }
 
 .todos-section::-webkit-scrollbar-track {
   background: transparent;
-  padding: 2px;
 }
 
-.todos-section::-webkit-scrollbar-thumb {
-  background-color: #8E4BE6;
-}
+  .todos-section::-webkit-scrollbar-thumb {
+    background-color: #8E4BE6;
+  }
 
   .button-add-todo button.button-delete-todo .button-logout {
       height: 47px !important;
@@ -232,6 +233,7 @@ export default {
   .app-title {
     font-size: 30px;
     font-weight: 700;
+    color : var(--text-color);
   }
 
   .header-page-index {
@@ -246,6 +248,7 @@ export default {
     height: 47px;
     background-color: transparent;
     border: none;
+    color : var(--icon-color);
   }
 
   .add-todo-section {
@@ -256,15 +259,20 @@ export default {
 
 
   .input-add-todo {
+    border: 2px solid var(--border-color);
+    border-radius: 3px;
     width: 100%;
     padding: 8px;
     margin-right: 5px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
   }
 
   .input-add-todo:focus-within {
     border: 2px solid #8E4BE6;
     box-shadow: 0 0 0 0;
     outline: 0;
+    background-color: var(--bg-color);
   }
 
   .input-add-todo-section {
@@ -310,7 +318,8 @@ export default {
     align-content: stretch;
     align-content: center;
     border-radius: 3px;
-    background-color: #f2f2f2;
+    background-color: var(--todo-bg-color);
+    color: var(--text-color);
   }
 
   .todo-button-delete-section {
@@ -329,7 +338,7 @@ export default {
     align-content: center;
     margin-top: 10px;
     padding: 3px;
-    background-color: white;
+    background-color: var(--bg-color);
   }
 
   .todos-page-footer button {
@@ -342,6 +351,7 @@ export default {
 
   .text-no-todos {
     text-align: center;
+    color: var(--text-color);
   }
 
   .todos-page-footer-content {
@@ -350,7 +360,8 @@ export default {
     align-content: center;
     margin-top: 10px;
     padding: 3px;
-    background-color: white;
+    background-color: var(--bg-color);
+    color: var(--text-color);
   }
 
   .todos-page-footer-content button {
@@ -359,6 +370,12 @@ export default {
     border: none;
     border-radius: 3px;
     color: white;
+  }
+
+  .header-section-buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
   }
 
 </style>
