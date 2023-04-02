@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 export default {
   name: 'SwitchColorMode',
@@ -19,13 +20,13 @@ export default {
       colorMode : 'light',
     }
   },
-  mounted() {
+  created() {
     const cookieColorMode = this.getCookieColorMode();
     if (cookieColorMode != null) {
       this.colorMode = cookieColorMode;
     }
 
-    this.applyColorMode();
+    setTimeout(() => this.applyColorMode(), 500);
   },
   methods: {
     toggleColorMode() {

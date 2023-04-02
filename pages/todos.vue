@@ -209,7 +209,7 @@ export default {
     margin-top: 20px;
     overflow: scroll;
     max-height: 500px;
-    padding: 4px;
+    padding: 2px;
   }
 
   .todos-section::-webkit-scrollbar {

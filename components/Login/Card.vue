@@ -48,11 +48,6 @@ export default {
         return;
       }
 
-      Toast.fire({
-          icon: 'info',
-          title: 'Fazendo login...'
-        });
-
       this.$axios.post('/api/v1/auth/login', this.credentials)
       .then(response => {
         setAccessToken(response.data.data.token);
