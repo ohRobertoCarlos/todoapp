@@ -141,6 +141,7 @@ export default {
             };
         },
         logout() {
+          this.setLightColorMode();
             logoutAll(this.$axios);
             removeAccessToken();
             Toast.fire({
@@ -187,13 +188,18 @@ export default {
                 .then(response => {
                 Toast.fire({
                     icon: "success",
-                    title: "Todas tarefas deletadas com sucesso!"
+                    title: "Todas tarefas deletadas com sucesso!",
                 });
                 this.getTodos();
             })
                 .catch(err => {
             });
         },
+        setLightColorMode() {
+          if (process.client) {
+            document.body.className = 'light-mode';
+          }
+        }
     },
 }
 </script>
@@ -203,17 +209,16 @@ export default {
     margin-top: 20px;
     overflow: scroll;
     max-height: 500px;
-    padding: 5px;
+    padding: 4px;
   }
 
   .todos-section::-webkit-scrollbar {
-  width: 3px;
-  height: 3px; /* A altura só é vista quando a rolagem é horizontal */
+  width: 6px;
+  height: 0px; /* A altura só é vista quando a rolagem é horizontal */
 }
 
 .todos-section::-webkit-scrollbar-track {
   background: transparent;
-  padding: 2px;
 }
 
   .todos-section::-webkit-scrollbar-thumb {
@@ -267,6 +272,7 @@ export default {
     border: 2px solid #8E4BE6;
     box-shadow: 0 0 0 0;
     outline: 0;
+    background-color: var(--bg-color);
   }
 
   .input-add-todo-section {

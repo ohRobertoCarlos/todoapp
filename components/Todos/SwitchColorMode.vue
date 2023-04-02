@@ -11,17 +11,21 @@
 </template>
 
 <script>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 export default {
   name: 'SwitchColorMode',
-  comments: {
-    FontAwesomeIcon
-  },
   data() {
     return {
       colorMode : 'light',
     }
+  },
+  mounted() {
+    const cookieColorMode = this.getCookieColorMode();
+    if (cookieColorMode != null) {
+      this.colorMode = cookieColorMode;
+    }
+
+    this.applyColorMode();
   },
   methods: {
     toggleColorMode() {
@@ -33,6 +37,32 @@ export default {
           document.body.className = 'light-mode';
           this.colorMode = 'light';
         }
+        this.setCookieColorMode();
+      }
+    },
+    applyColorMode() {
+      if (process.client) {
+        if (this.colorMode == 'light') {
+          document.body.className = 'light-mode';
+        } else {
+          document.body.className = 'dark-mode';
+        }
+        this.setCookieColorMode();
+      }
+    },
+    setCookieColorMode() {
+      if (process.client) {
+        const d = new Date();
+        d.setTime(d.getTime() + (60*24*60*60*1000));
+        let expires = "expires="+ d.toUTCString();
+        document.cookie = 'color_mode_to_app' + "=" + this.colorMode + ";" + expires + ";path=/";
+      }
+    },
+    getCookieColorMode() {
+      if (process.client) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${'color_mode_to_app'}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
       }
     }
   }

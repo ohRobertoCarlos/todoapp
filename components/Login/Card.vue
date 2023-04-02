@@ -55,10 +55,6 @@ export default {
 
       this.$axios.post('/api/v1/auth/login', this.credentials)
       .then(response => {
-        Toast.fire({
-          icon: 'success',
-          title: 'Login feito com sucesso!'
-        });
         setAccessToken(response.data.data.token);
         this.$router.push({name:'index'});
       })
