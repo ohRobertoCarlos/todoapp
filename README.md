@@ -34,3 +34,8 @@ $ npm install
 # serve with hot reload at localhost:3000
 $ npm run dev
 ```
+
+### Para rodar os testes, execute:
+```bash
+npm run test
+```
