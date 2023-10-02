@@ -45,7 +45,7 @@
       <b-container fluid="sm">
         <div class="todos-page-footer-content">
           <span>
-            Você ainda tem {{ todosCount }} tarefa(s).
+            Você ainda tem {{ todosCount }} tarefa(s)
           </span>
 
           <button @click="deleteAllTodos()">
@@ -98,13 +98,16 @@ export default {
                     Accept: "application/json"
                 }
             })
-                .then(response => {
+            .then(response => {
                 this.todos = response.data;
             })
-                .catch(err => {
-                //
+            .catch(err => {
+                Toast.fire({
+                  icon: "error",
+                  title: "Não foi possível carregar as tarefas.",
+                });
             })
-                .finally(() => {
+            .finally(() => {
                 this.loading = false;
             });
         },
@@ -112,27 +115,23 @@ export default {
             if (!this.todo.content) {
                 return;
             }
-            Toast.fire({
-                icon: "info",
-                title: "Adicionando...",
-            });
+
             this.$axios.post("/api/v1/todos", this.todo, {
                 headers: {
                     Authorization: "Bearer " + getAccessToken(),
                     Accept: "application/json"
                 }
             })
-                .then(response => {
-                Toast.fire({
-                    icon: "success",
-                    title: "Tarefa adicionada com sucesso!",
-                });
+            .then(response => {
                 this.resetTodoInput();
                 this.todos.push(response.data);
                 setTimeout(() => this.scrollBottomTodoSection(), 500);
             })
-                .catch(err => {
-                //
+            .catch(err => {
+                Toast.fire({
+                  icon: "error",
+                  title: "Não foi possível adicionar a tarefa.",
+                });
             });
         },
         resetTodoInput() {
@@ -144,10 +143,6 @@ export default {
           this.setLightColorMode();
             logoutAll(this.$axios);
             removeAccessToken();
-            Toast.fire({
-                icon: "success",
-                title: "Logout feito com sucesso!"
-            });
             this.$router.push({ name: "Login" });
         },
         scrollBottomTodoSection() {
@@ -157,42 +152,42 @@ export default {
             if (!confirm("Tem certeza?")) {
                 return;
             }
+
             this.$axios.delete("/api/v1/todos/" + todoId, {
                 headers: {
                     Authorization: "Bearer " + getAccessToken(),
                     Accept: "application/json",
                 }
             })
-                .then(response => {
+            .then(response => {
                 this.todos = this.todos.filter(t => t.id !== todoId);
             })
-                .catch(err => {
+            .catch(err => {
+                Toast.fire({
+                  icon: "error",
+                  title: "Não foi possível deletar a tarefa.",
+                });
             });
         },
         deleteAllTodos() {
             if (!confirm("Tem certeza?")) {
                 return;
             }
-            Toast.fire({
-                icon: "info",
-                title: "Limpando todas..."
-            }).then((toast) => {
-                toast.close();
-            });
+
             this.$axios.delete("/api/v1/todos/allTodos", {
                 headers: {
                     Authorization: "Bearer " + getAccessToken(),
                     Accept: "application/json",
                 }
             })
-                .then(response => {
-                Toast.fire({
-                    icon: "success",
-                    title: "Todas tarefas deletadas com sucesso!",
-                });
+            .then(response => {
                 this.getTodos();
             })
-                .catch(err => {
+            .catch(err => {
+                Toast.fire({
+                  icon: "error",
+                  title: "Não foi possível deletar as tarefas.",
+                });
             });
         },
         setLightColorMode() {
